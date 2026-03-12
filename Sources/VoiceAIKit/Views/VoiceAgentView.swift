@@ -7,6 +7,8 @@ import AVFoundation
 /// ```swift
 /// VoiceAgentView(config: .default)
 /// VoiceAgentView(config: .default, initialAgentType: "legalAdviser")
+/// // Skip form and auto-connect:
+/// VoiceAgentView(userInfo: UserInfo(name: "John", subject: "Contract review", language: "English", type: "legalAdviser"))
 /// ```
 public struct VoiceAgentView: View {
     @StateObject private var viewModel: VoiceAgentViewModel
@@ -34,11 +36,25 @@ public struct VoiceAgentView: View {
     }
     private var theme: AgentTheme { activeConfig.theme }
 
-    public init(config: VoiceAgentConfig = .default, initialAgentType: String = "") {
+    private let prefilledUserInfo: UserInfo?
+
+    /// Create a voice agent view.
+    /// - Parameters:
+    ///   - config: Server URLs, agent types, retry settings.
+    ///   - initialAgentType: Which agent type to preselect (empty = first).
+    ///   - userInfo: When provided, the form is skipped and the session starts immediately with this info.
+    public init(config: VoiceAgentConfig = .default, initialAgentType: String = "", userInfo: UserInfo? = nil) {
         self.config = config
+        self.prefilledUserInfo = userInfo
         let resolvedType = initialAgentType.isEmpty ? config.defaultAgentType : initialAgentType
         _typeField = State(initialValue: resolvedType)
         _viewModel = StateObject(wrappedValue: VoiceAgentViewModel(config: config))
+        _showForm = State(initialValue: userInfo == nil)
+        if let info = userInfo {
+            _nameField = State(initialValue: info.name)
+            _subjectField = State(initialValue: info.subject)
+            _languageField = State(initialValue: info.language.isEmpty ? "English" : info.language)
+        }
     }
 
     public var body: some View {
@@ -52,7 +68,17 @@ public struct VoiceAgentView: View {
             }
         }
         .animation(.easeInOut(duration: 0.3), value: showForm)
-        .onAppear { checkMicPermission() }
+        .onAppear {
+            checkMicPermission()
+            if let info = prefilledUserInfo {
+                viewModel.userInfo = UserInfo(
+                    name: info.name, subject: info.subject,
+                    grade: info.grade, language: info.language.isEmpty ? "English" : info.language,
+                    type: info.type.isEmpty ? typeField : info.type
+                )
+                if hasPermission { viewModel.toggle() } else { requestMicPermission() }
+            }
+        }
         .onDisappear { viewModel.disconnect() }
         .preferredColorScheme(.dark)
     }
