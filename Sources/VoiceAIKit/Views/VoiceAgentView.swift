@@ -53,6 +53,7 @@ public struct VoiceAgentView: View {
         }
         .animation(.easeInOut(duration: 0.3), value: showForm)
         .onAppear { checkMicPermission() }
+        .onDisappear { viewModel.disconnect() }
         .preferredColorScheme(.dark)
     }
 
