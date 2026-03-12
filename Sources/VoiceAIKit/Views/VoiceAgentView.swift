@@ -57,16 +57,6 @@ public struct VoiceAgentView: View {
         }
     }
 
-    /// Initialize with pre-filled user info to skip the form and start directly.
-    public init(config: VoiceAgentConfig = .default, userInfo: UserInfo) {
-        self.config = config
-        _typeField = State(initialValue: userInfo.type.isEmpty ? config.defaultAgentType : userInfo.type)
-        _nameField = State(initialValue: userInfo.name)
-        _subjectField = State(initialValue: userInfo.subject)
-        _languageField = State(initialValue: userInfo.language)
-        _viewModel = StateObject(wrappedValue: VoiceAgentViewModel(config: config))
-    }
-
     public var body: some View {
         ZStack {
             theme.backgroundColor.ignoresSafeArea()
