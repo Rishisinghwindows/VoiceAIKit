@@ -61,6 +61,55 @@ public struct AgentTheme: Sendable {
     }
 }
 
+// MARK: - Copying (override individual properties)
+
+extension AgentTheme {
+    /// Create a copy of this theme, overriding only the properties you pass.
+    ///
+    /// ```swift
+    /// // Start from the default theme and just change background + accent:
+    /// let myTheme = AgentTheme.default.copying(
+    ///     backgroundColor: .black,
+    ///     accentColor: .red
+    /// )
+    /// ```
+    public func copying(
+        backgroundColor: Color? = nil,
+        titleGradient: [Color]? = nil,
+        accentColor: Color? = nil,
+        speakingAccentColor: Color? = nil,
+        subtleTextColor: Color? = nil,
+        dimmedTextColor: Color? = nil,
+        idleBlobColors: [RGBA]? = nil,
+        idleRingColors: [Color]? = nil,
+        activeBlobColors: [RGBA]? = nil,
+        activeRingColors: [Color]? = nil,
+        idleGlowColor: RGBA? = nil,
+        activeGlowColor: RGBA? = nil,
+        orbDarkBase: Color? = nil,
+        idleOrbBg: RGBA? = nil,
+        activeOrbBg: RGBA? = nil
+    ) -> AgentTheme {
+        AgentTheme(
+            backgroundColor: backgroundColor ?? self.backgroundColor,
+            titleGradient: titleGradient ?? self.titleGradient,
+            accentColor: accentColor ?? self.accentColor,
+            speakingAccentColor: speakingAccentColor ?? self.speakingAccentColor,
+            subtleTextColor: subtleTextColor ?? self.subtleTextColor,
+            dimmedTextColor: dimmedTextColor ?? self.dimmedTextColor,
+            idleBlobColors: idleBlobColors ?? self.idleBlobColors,
+            idleRingColors: idleRingColors ?? self.idleRingColors,
+            activeBlobColors: activeBlobColors ?? self.activeBlobColors,
+            activeRingColors: activeRingColors ?? self.activeRingColors,
+            idleGlowColor: idleGlowColor ?? self.idleGlowColor,
+            activeGlowColor: activeGlowColor ?? self.activeGlowColor,
+            orbDarkBase: orbDarkBase ?? self.orbDarkBase,
+            idleOrbBg: idleOrbBg ?? self.idleOrbBg,
+            activeOrbBg: activeOrbBg ?? self.activeOrbBg
+        )
+    }
+}
+
 // MARK: - Built-in Themes
 
 extension AgentTheme {

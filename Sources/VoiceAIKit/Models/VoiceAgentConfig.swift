@@ -66,6 +66,42 @@ public struct VoiceAgentConfig {
     }
 }
 
+// MARK: - Copying (override individual properties)
+
+extension AgentTypeConfig {
+    /// Create a copy of this agent type config, overriding only the properties you pass.
+    ///
+    /// ```swift
+    /// // Start from the built-in legal config and customize:
+    /// let myAgent = AgentTypeConfig.legalAdviser.copying(
+    ///     title: "My Legal Bot",
+    ///     taglines: ["Ask me anything about law"],
+    ///     theme: .legal.copying(backgroundColor: .black)
+    /// )
+    /// ```
+    public func copying(
+        id: String? = nil,
+        displayName: String? = nil,
+        title: String? = nil,
+        subtitle: String? = nil,
+        footerText: String? = nil,
+        subjectPlaceholder: String? = nil,
+        taglines: [String]? = nil,
+        theme: AgentTheme? = nil
+    ) -> AgentTypeConfig {
+        AgentTypeConfig(
+            id: id ?? self.id,
+            displayName: displayName ?? self.displayName,
+            title: title ?? self.title,
+            subtitle: subtitle ?? self.subtitle,
+            footerText: footerText ?? self.footerText,
+            subjectPlaceholder: subjectPlaceholder ?? self.subjectPlaceholder,
+            taglines: taglines ?? self.taglines,
+            theme: theme ?? self.theme
+        )
+    }
+}
+
 // MARK: - Built-in Agent Type Configs
 
 extension AgentTypeConfig {
