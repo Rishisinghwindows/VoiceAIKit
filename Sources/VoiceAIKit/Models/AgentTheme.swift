@@ -115,53 +115,55 @@ extension AgentTheme {
         activeOrbBg: RGBA(r: 0.04, g: 0.12, b: 0.10, a: 1)
     )
 
-    /// Amber/gold theme for legal adviser.
+    /// Deep navy background with golden/amber accents — inspired by legal/law apps.
     public static let legal = AgentTheme(
-        backgroundColor: Color(red: 0.102, green: 0.071, blue: 0.039),
+        backgroundColor: Color(red: 0.067, green: 0.067, blue: 0.165),   // #111129 deep navy
         titleGradient: [
-            Color(red: 0.831, green: 0.533, blue: 0.039),
-            Color(red: 0.855, green: 0.667, blue: 0.125),
+            Color(red: 0.886, green: 0.718, blue: 0.220),  // golden yellow
+            Color(red: 0.957, green: 0.804, blue: 0.298),  // bright amber
         ],
-        accentColor: Color(red: 0.855, green: 0.667, blue: 0.125),
-        speakingAccentColor: Color(red: 0.961, green: 0.784, blue: 0.314),
+        accentColor: Color(red: 0.886, green: 0.718, blue: 0.220),       // gold
+        speakingAccentColor: Color(red: 0.957, green: 0.804, blue: 0.298), // bright gold
+        subtleTextColor: Color.white.opacity(0.35),
+        dimmedTextColor: Color.white.opacity(0.15),
         idleBlobColors: [
-            RGBA(r: 0.824, g: 0.549, b: 0.157, a: 0.90),
-            RGBA(r: 0.784, g: 0.510, b: 0.137, a: 0.80),
-            RGBA(r: 0.855, g: 0.627, b: 0.196, a: 0.70),
-            RGBA(r: 0.745, g: 0.471, b: 0.118, a: 0.65),
-            RGBA(r: 0.906, g: 0.690, b: 0.275, a: 0.55),
-            RGBA(r: 0.780, g: 0.490, b: 0.120, a: 0.60),
-            RGBA(r: 0.860, g: 0.600, b: 0.200, a: 0.50),
+            RGBA(r: 0.886, g: 0.718, b: 0.220, a: 0.90),  // gold
+            RGBA(r: 0.400, g: 0.310, b: 0.700, a: 0.80),  // indigo accent
+            RGBA(r: 0.957, g: 0.804, b: 0.298, a: 0.70),  // amber
+            RGBA(r: 0.310, g: 0.270, b: 0.580, a: 0.65),  // deep purple
+            RGBA(r: 0.886, g: 0.718, b: 0.220, a: 0.55),  // gold
+            RGBA(r: 0.480, g: 0.380, b: 0.750, a: 0.60),  // purple
+            RGBA(r: 0.820, g: 0.650, b: 0.180, a: 0.50),  // dark gold
         ],
         idleRingColors: [
-            Color(red: 0.831, green: 0.533, blue: 0.039),
-            Color(red: 0.784, green: 0.439, blue: 0.125),
-            Color(red: 0.910, green: 0.627, blue: 0.125),
-            Color(red: 0.722, green: 0.525, blue: 0.043),
-            Color(red: 0.855, green: 0.667, blue: 0.125),
-            Color(red: 0.831, green: 0.533, blue: 0.039),
+            Color(red: 0.886, green: 0.718, blue: 0.220),
+            Color(red: 0.400, green: 0.310, blue: 0.700),
+            Color(red: 0.957, green: 0.804, blue: 0.298),
+            Color(red: 0.310, green: 0.270, blue: 0.580),
+            Color(red: 0.886, green: 0.718, blue: 0.220),
+            Color(red: 0.480, green: 0.380, blue: 0.750),
         ],
         activeBlobColors: [
-            RGBA(r: 0.961, g: 0.784, b: 0.314, a: 0.90),
-            RGBA(r: 0.855, g: 0.667, b: 0.125, a: 0.80),
-            RGBA(r: 0.941, g: 0.753, b: 0.235, a: 0.70),
-            RGBA(r: 0.784, g: 0.627, b: 0.157, a: 0.65),
-            RGBA(r: 0.961, g: 0.816, b: 0.376, a: 0.55),
-            RGBA(r: 0.880, g: 0.700, b: 0.200, a: 0.60),
-            RGBA(r: 0.940, g: 0.780, b: 0.280, a: 0.50),
+            RGBA(r: 0.957, g: 0.804, b: 0.298, a: 0.90),  // bright gold
+            RGBA(r: 0.886, g: 0.718, b: 0.220, a: 0.80),  // gold
+            RGBA(r: 0.980, g: 0.850, b: 0.400, a: 0.70),  // light gold
+            RGBA(r: 0.500, g: 0.400, b: 0.780, a: 0.65),  // purple flash
+            RGBA(r: 0.957, g: 0.804, b: 0.298, a: 0.55),  // amber
+            RGBA(r: 0.920, g: 0.760, b: 0.260, a: 0.60),  // warm gold
+            RGBA(r: 0.980, g: 0.870, b: 0.420, a: 0.50),  // pale gold
         ],
         activeRingColors: [
-            Color(red: 0.961, green: 0.784, blue: 0.314),
-            Color(red: 0.855, green: 0.667, blue: 0.125),
-            Color(red: 0.910, green: 0.722, blue: 0.188),
-            Color(red: 0.784, green: 0.627, blue: 0.125),
-            Color(red: 0.941, green: 0.816, blue: 0.376),
-            Color(red: 0.961, green: 0.784, blue: 0.314),
+            Color(red: 0.957, green: 0.804, blue: 0.298),
+            Color(red: 0.886, green: 0.718, blue: 0.220),
+            Color(red: 0.980, green: 0.850, blue: 0.400),
+            Color(red: 0.500, green: 0.400, blue: 0.780),
+            Color(red: 0.957, green: 0.804, blue: 0.298),
+            Color(red: 0.920, green: 0.760, blue: 0.260),
         ],
-        idleGlowColor: RGBA(r: 0.824, g: 0.549, b: 0.157, a: 0.22),
-        activeGlowColor: RGBA(r: 0.961, g: 0.784, b: 0.314, a: 0.22),
-        orbDarkBase: Color(red: 0.05, green: 0.03, blue: 0.02),
-        idleOrbBg: RGBA(r: 0.10, g: 0.06, b: 0.03, a: 1),
-        activeOrbBg: RGBA(r: 0.10, g: 0.08, b: 0.03, a: 1)
+        idleGlowColor: RGBA(r: 0.886, g: 0.718, b: 0.220, a: 0.25),
+        activeGlowColor: RGBA(r: 0.957, g: 0.804, b: 0.298, a: 0.28),
+        orbDarkBase: Color(red: 0.04, green: 0.04, blue: 0.10),
+        idleOrbBg: RGBA(r: 0.08, g: 0.07, b: 0.18, a: 1),
+        activeOrbBg: RGBA(r: 0.10, g: 0.09, b: 0.06, a: 1)
     )
 }
