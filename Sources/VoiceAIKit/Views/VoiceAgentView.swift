@@ -37,15 +37,18 @@ public struct VoiceAgentView: View {
     private var theme: AgentTheme { activeConfig.theme }
 
     private let prefilledUserInfo: UserInfo?
+    private let onClose: (() -> Void)?
 
     /// Create a voice agent view.
     /// - Parameters:
     ///   - config: Server URLs, agent types, retry settings.
     ///   - initialAgentType: Which agent type to preselect (empty = first).
     ///   - userInfo: When provided, the form is skipped and the session starts immediately with this info.
-    public init(config: VoiceAgentConfig = .default, initialAgentType: String = "", userInfo: UserInfo? = nil) {
+    ///   - onClose: Optional callback when the user taps the close button. When nil, no close button is shown.
+    public init(config: VoiceAgentConfig = .default, initialAgentType: String = "", userInfo: UserInfo? = nil, onClose: (() -> Void)? = nil) {
         self.config = config
         self.prefilledUserInfo = userInfo
+        self.onClose = onClose
         let resolvedType = initialAgentType.isEmpty ? config.defaultAgentType : initialAgentType
         _typeField = State(initialValue: resolvedType)
         _viewModel = StateObject(wrappedValue: VoiceAgentViewModel(config: config))
@@ -97,6 +100,21 @@ public struct VoiceAgentView: View {
     // MARK: - Form View
 
     private var formView: some View {
+        ZStack(alignment: .topLeading) {
+            if let onClose {
+                Button(action: { onClose() }) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(theme.subtleTextColor)
+                        .frame(width: 32, height: 32)
+                        .background(Color.white.opacity(0.1))
+                        .clipShape(Circle())
+                }
+                .padding(.leading, 16)
+                .padding(.top, 12)
+                .zIndex(1)
+            }
+
         GeometryReader { geo in
             ScrollView {
                 VStack(spacing: 20) {
@@ -164,11 +182,31 @@ public struct VoiceAgentView: View {
             }
             .scrollDismissesKeyboard(.interactively)
         }
+        } // ZStack
     }
 
     // MARK: - Session View
 
     private var sessionView: some View {
+        ZStack(alignment: .topLeading) {
+            // Close button
+            if let onClose {
+                Button(action: {
+                    viewModel.disconnect()
+                    onClose()
+                }) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(theme.subtleTextColor)
+                        .frame(width: 32, height: 32)
+                        .background(Color.white.opacity(0.1))
+                        .clipShape(Circle())
+                }
+                .padding(.leading, 16)
+                .padding(.top, 12)
+                .zIndex(1)
+            }
+
         VStack(spacing: 0) {
             // Top: title + subtitle + tagline
             VStack(spacing: 6) {
@@ -264,6 +302,7 @@ public struct VoiceAgentView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { showStatus = true }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { showFooter = true }
         }
+        } // ZStack
     }
 
     // MARK: - Helpers
