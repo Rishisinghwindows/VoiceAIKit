@@ -38,21 +38,24 @@ public struct VoiceAgentView: View {
 
     private let prefilledUserInfo: UserInfo?
     private let onClose: (() -> Void)?
+    private let showFormOnReturn: Bool
 
     /// Create a voice agent view.
     /// - Parameters:
     ///   - config: Server URLs, agent types, retry settings.
     ///   - initialAgentType: Which agent type to preselect (empty = first).
     ///   - userInfo: When provided, the form is skipped and the session starts immediately with this info.
+    ///   - showFormOnReturn: Whether to show the form when returning from a session. Default is true.
     ///   - onClose: Optional callback when the user taps the close button. When nil, no close button is shown.
-    public init(config: VoiceAgentConfig = .default, initialAgentType: String = "", userInfo: UserInfo? = nil, onClose: (() -> Void)? = nil) {
+    public init(config: VoiceAgentConfig = .default, initialAgentType: String = "", userInfo: UserInfo? = nil, showFormOnReturn: Bool = true, onClose: (() -> Void)? = nil) {
         self.config = config
         self.prefilledUserInfo = userInfo
         self.onClose = onClose
+        self.showFormOnReturn = showFormOnReturn
         let resolvedType = initialAgentType.isEmpty ? config.defaultAgentType : initialAgentType
         _typeField = State(initialValue: resolvedType)
         _viewModel = StateObject(wrappedValue: VoiceAgentViewModel(config: config))
-        _showForm = State(initialValue: userInfo == nil)
+        _showForm = State(initialValue: showFormOnReturn && userInfo == nil)
         if let info = userInfo {
             _nameField = State(initialValue: info.name)
             _subjectField = State(initialValue: info.subject)
@@ -343,7 +346,7 @@ public struct VoiceAgentView: View {
         } else {
             viewModel.toggle()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                if viewModel.state == .idle { showForm = true }
+                if viewModel.state == .idle && showFormOnReturn { showForm = true }
             }
         }
     }
