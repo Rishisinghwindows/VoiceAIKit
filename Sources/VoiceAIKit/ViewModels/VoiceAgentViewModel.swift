@@ -11,6 +11,9 @@ public class VoiceAgentViewModel: ObservableObject {
 
     public var userInfo = UserInfo()
 
+    /// When true, automatically connects on first appear (no tap needed).
+    public var autoConnect = false
+
     private let config: VoiceAgentConfig
     private var room: Room?
     private let agentAudioAnalyzer = AudioAnalyzer()
@@ -20,6 +23,12 @@ public class VoiceAgentViewModel: ObservableObject {
 
     public init(config: VoiceAgentConfig = .default) {
         self.config = config
+    }
+
+    /// Call this once mic permission is granted to auto-start if configured.
+    public func connectIfNeeded() {
+        guard autoConnect, state == .idle || state == .disconnected else { return }
+        connect()
     }
 
     /// Toggle between connected and disconnected states.
@@ -51,6 +60,9 @@ public class VoiceAgentViewModel: ObservableObject {
                         userInfo: userInfo
                     )
 
+                    // Use URL from token response (server-authoritative), fall back to config
+                    let livekitURL = tokenResponse.url.isEmpty ? config.livekitURL : tokenResponse.url
+
                     let connectOptions = ConnectOptions(
                         autoSubscribe: true,
                         primaryTransportConnectTimeout: 30,
@@ -61,7 +73,7 @@ public class VoiceAgentViewModel: ObservableObject {
                     room = newRoom
 
                     try await newRoom.connect(
-                        url: config.livekitURL,
+                        url: livekitURL,
                         token: tokenResponse.token,
                         connectOptions: connectOptions
                     )

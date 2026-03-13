@@ -68,6 +68,16 @@ public struct VoiceAgentView: View {
             }
         }
         .animation(.easeInOut(duration: 0.3), value: showForm)
+        .onChange(of: viewModel.state) { newState in
+            // Auto-reconnect once after disconnect if autoConnect is on
+            if newState == .disconnected && viewModel.autoConnect && hasPermission {
+                // Disable to prevent infinite retry loop
+                viewModel.autoConnect = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    viewModel.toggle()
+                }
+            }
+        }
         .onAppear {
             checkMicPermission()
             if let info = prefilledUserInfo {
@@ -76,7 +86,8 @@ public struct VoiceAgentView: View {
                     grade: info.grade, language: info.language.isEmpty ? "English" : info.language,
                     type: info.type.isEmpty ? typeField : info.type
                 )
-                if hasPermission { viewModel.toggle() } else { requestMicPermission() }
+                viewModel.autoConnect = true
+                if hasPermission { viewModel.connectIfNeeded() } else { requestMicPermission() }
             }
         }
         .onDisappear { viewModel.disconnect() }
@@ -306,7 +317,13 @@ public struct VoiceAgentView: View {
         AVAudioSession.sharedInstance().requestRecordPermission { granted in
             DispatchQueue.main.async {
                 hasPermission = granted
-                if granted { viewModel.toggle() }
+                if granted {
+                    if viewModel.autoConnect {
+                        viewModel.connectIfNeeded()
+                    } else {
+                        viewModel.toggle()
+                    }
+                }
             }
         }
     }
